@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "Черные списки банка",
+    "description": "Внутренний сервис для передачи информации о юридических и физических лицах, включенных в черные списки банка."
+  },
+  "servers": [
+    {
+      "url": "http://host/base/hs/blackLists"
+    }
+  ],
+  "tags": [
+    {
+      "name": "employers",
+      "description": "Черный список работодателей."
+    },
+    {
+      "name": "persons",
+      "description": "Черный список физических лиц."
+    }
+  ],
+  "paths": {
+    "/employers/{recordId}": {
+      "post": {
+        "tags": [
+          "employers"
+        ],
+        "summary": "Синхронизировать запись о работодателе.",
+        "description": "Синхронизирует запись в черном списке на стороне банка с сервисом. Если указанная запись не существует, она будет создана, в противном случае - перезаписана.",
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "description": "Идентификатор записи о работодателе на стороне банка.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Данные для авторизации по схеме Basic (логин и пароль, разделенные двоеточием, в кодировке Base64).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запись успешно синхронизирована."
+          },
+          "400": {
+            "description": "Не удалось синхронизировать запись.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Отсутствует обязательное свойство \"name\" (Наименование юридического лица).",
+                  "description": "Описание причины, по которой не удалось синхронизировать запись черного списка."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/employers.blackListRecord+json": {
+              "schema": {
+                "$ref": "#/components/schemas/employers.blackListRecord"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/persons/{recordId}": {
+      "post": {
+        "tags": [
+          "persons"
+        ],
+        "summary": "Синхронизировать запись о физическом лице.",
+        "description": "Синхронизирует запись в черном списке на стороне банка с сервисом. Если указанная запись не существует, она будет создана, в противном случае - перезаписана.",
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "description": "Идентификатор записи о физическом лице на стороне банка.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Данные для авторизации по схеме Basic (логин и пароль, разделенные двоеточием, в кодировке Base64).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запись успешно синхронизирована."
+          },
+          "400": {
+            "description": "Не удалось синхронизировать запись.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Некорректный формат даты записи (свойство \"date\"). Дата должна быть представлена в формате ISO 8601:2004 вида YYYY-MM-DDThh:mm:ss.",
+                  "description": "Описание причины, по которой не удалось синхронизировать запись черного списка."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/persons.blackListRecord+json": {
+              "schema": {
+                "$ref": "#/components/schemas/persons.blackListRecord"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "employers.blackListRecord": {
+        "type": "object",
+        "description": "Данные файла.",
+        "required": [
+          "date",
+          "name",
+          "inn",
+          "isInBlackList"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Дата и время записи на стороне банка в формате ISO 8601:2004 вида YYYY-MM-DDThh:mm:ss.",
+            "example": "2020-07-29T15:39:47"
+          },
+          "isInBlackList": {
+            "type": "boolean",
+            "description": "Признак нахождения юридического лица в черном списке на момент записи.",
+            "example": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование юридического лица.",
+            "example": "ООО \"Ромашка\""
+          },
+          "inn": {
+            "type": "string",
+            "description": "ИНН юридического лица.",
+            "example": "7749698435"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Телефон юридического лица.",
+            "example": "8 (495) 487-69-14"
+          }
+        }
+      },
+      "persons.blackListRecord": {
+        "type": "object",
+        "description": "Данные файла.",
+        "required": [
+          "date",
+          "surname",
+          "name",
+          "isInBlackList"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Дата и время записи на стороне банка в формате ISO 8601:2004 вида YYYY-MM-DDThh:mm:ss.",
+            "example": "2020-07-29T15:39:47"
+          },
+          "isInBlackList": {
+            "type": "boolean",
+            "description": "Признак нахождения физического лица в черном списке на момент записи.",
+            "example": true
+          },
+          "surname": {
+            "type": "string",
+            "description": "Фамилия физического лица.",
+            "example": "Иванов"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя физического лица.",
+            "example": "Иван"
+          },
+          "patronymic": {
+            "type": "string",
+            "description": "Отчество физического лица.",
+            "example": "Иванович"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Дата рождения физического лица в формате ISO 8601:2004 вида YYYY-MM-DD.",
+            "example": "1982-06-14"
+          },
+          "passport": {
+            "type": "object",
+            "description": "Паспорт физического лица.",
+            "required": [
+              "series",
+              "number",
+              "issuedBy",
+              "dateOfIssue"
+            ],
+            "properties": {
+              "series": {
+                "type": "string",
+                "example": "76 23",
+                "description": "Серия"
+              },
+              "number": {
+                "type": "string",
+                "example": "762348",
+                "description": "Номер"
+              },
+              "issuedBy": {
+                "type": "string",
+                "example": "ОТДЕЛОМ УФМС РОССИИ ПО САМАРСКОЙ ОБЛАСТИ В КУЙБЫШЕВСКОМ РАЙОНЕ ГОР. САМАРЫ",
+                "description": "Кем выдан"
+              },
+              "dateOfIssue": {
+                "type": "string",
+                "example": "2008-07-19",
+                "description": "Дата выдачи в формате ISO 8601:2004 вида YYYY-MM-DD."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
