@@ -1,11 +1,15 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "v1",
+    "version": "1.0.0",
     "title": "Черные списки банка",
     "description": "Внутренний сервис для передачи информации о юридических и физических лицах, включенных в черные списки банка."
   },
   "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/KonstantinKok/Test1/1.0.0"
+    },
     {
       "url": "http://host/base/hs/blackLists"
     }
@@ -176,6 +180,17 @@
             "type": "string",
             "description": "Телефон юридического лица.",
             "example": "8 (495) 487-69-14"
+          },
+          "typeСounterparty": {
+            "type": "string",
+            "enum": [
+              "Юридическое лицо",
+              "ИП"
+            ],
+            "description": "Вид контрагента"
+          },
+          "address": {
+            "$ref": "#/components/schemas/contact.details"
           }
         }
       },
@@ -250,6 +265,20 @@
                 "description": "Дата выдачи в формате ISO 8601:2004 вида YYYY-MM-DD."
               }
             }
+          }
+        }
+      },
+      "contact.details": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string",
+            "example": "Ленинградская"
+          },
+          "house": {
+            "type": "integer",
+            "format": "int64",
+            "example": 5
           }
         }
       }
