@@ -8,7 +8,7 @@
   "servers": [
     {
       "description": "SwaggerHub API Auto Mocking",
-      "url": "https://virtserver.swaggerhub.com/KonstantinKok/Test1/1.0.0"
+      "url": "https://localhost"
     },
     {
       "url": "http://host/base/hs/blackLists"
