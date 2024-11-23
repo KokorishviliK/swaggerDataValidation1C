@@ -1,10 +1,10 @@
-# Проверка модели данных по спецификации Swagger
+# Проверка модели данных по спецификации OpenAPI
 
 ## Ссылки
 
 [Описание формата](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.0.md)
 
-[Swagger](https://swagger.io/)
+[Swagger](https://editor.swagger.io/)
 
 ## Назначение в жизни
 
@@ -16,7 +16,7 @@
 
 Дано:
 
-* Swagger спецификация (Если нет, то пишется)
+* Спецификация OpenAPI (Если ее нет, то пишется)
 
 ### Решение
 
@@ -59,3 +59,7 @@
 
 * Версия спецификации должна быть 3.0.0
 * Спецификация передается в формате JSON
+
+## Проекты, внесшие вклад
+
+* [Подсистема интеграции](https://github.com/Segate-ekb/integration_subsystem)
